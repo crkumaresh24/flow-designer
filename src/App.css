@@ -1,0 +1,98 @@
+@import '~antd/dist/antd.css';
+
+.designer {
+    height: 100vh;
+    width: 100vw;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.menu-bar {
+    min-height: 48px;
+    max-height: 48px;
+    align-items: center;
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.grow {
+    flex-grow: 1;
+}
+
+.mar-auto-left {
+    margin-left: auto;
+}
+
+.mar-auto-right {
+    margin-right: auto;
+}
+
+.mar-8 {
+    margin: 8px;
+}
+
+.mar-top-8 {
+    margin-top: 8px;
+}
+
+.mar-top-16 {
+    margin-top: 16px;
+}
+
+.mar-left-8 {
+    margin-left: 8px;
+}
+
+.mar-left-16 {
+    margin-left: 16px;
+}
+
+.mar-right-8 {
+    margin-right: 8px;
+}
+
+.mar-right-16 {
+    margin-right: 16px;
+}
+
+.mar-16 {
+    margin: 16px;
+}
+
+.pad-8 {
+    margin: 8px;
+}
+
+.pad-16 {
+    margin: 16px;
+}
+
+.content-wrapper {
+    background-image: radial-gradient(lightgray 20%, transparent 20%);
+    background-position: 0 0;
+    background-size: 6px 6px;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+}
+
+.overflow-container {
+    flex: 1;
+    overflow: auto;
+}
+
+.overflow-content {
+    height: 8000px;
+    width: 8000px;
+    position: relative;
+}
