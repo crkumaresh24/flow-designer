@@ -13,7 +13,7 @@ const ParseFileTask = (props: TasksProps): React.ReactElement => {
                     req[fieldData.name.toString()] = fieldData.value;
                 });
                 props.setTaskRequest({
-                    fileId: req.fileId,
+                    path: req.path,
                     options: {
                         ...req,
                     },
@@ -21,8 +21,8 @@ const ParseFileTask = (props: TasksProps): React.ReactElement => {
             }}
             fields={[
                 {
-                    name: ['fileId'],
-                    value: props.task.request.fileId || undefined,
+                    name: ['path'],
+                    value: props.task.request.path || undefined,
                 },
                 {
                     name: ['quote'],
@@ -69,8 +69,8 @@ const ParseFileTask = (props: TasksProps): React.ReactElement => {
             <Row gutter={16}>
                 <Col span={24}>
                     <Form.Item
-                        name="fileId"
-                        label="File ID"
+                        name="path"
+                        label="File Path"
                         rules={[{ required: true, message: 'File ID is required!' }]}
                     >
                         <Input />
