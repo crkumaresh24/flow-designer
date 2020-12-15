@@ -3,6 +3,7 @@ import { Button, Modal, Space, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { DirectedGraph } from 'graphology';
 import React from 'react';
+import { JAR_ARTIFACTORY_URL, LIVY_SYSTEM_URL } from './globals';
 
 export interface MenusComponentProps {
     dag: DirectedGraph;
@@ -80,8 +81,6 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
 };
 
 const submitLivy = () => {
-    const JAR_ARTIFACTORY_URL = "http://localhost:8000";
-    const LIVY_SYSTEM_URL = "http://localhost:8998/batches";
     fetch(LIVY_SYSTEM_URL, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -109,8 +108,8 @@ const submitLivy = () => {
                 JAR_ARTIFACTORY_URL + "/jgrapht-core-1.0.1.jar",
             ],
             args: [
-                "http://host.docker.internal:8000/runnerList.json",
-                "http://host.docker.internal:8000/jdbctest.json",
+                JAR_ARTIFACTORY_URL + "/runnerList.json",
+                JAR_ARTIFACTORY_URL + "/jdbctest.json",
             ],
         }),
     })
