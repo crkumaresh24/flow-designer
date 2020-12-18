@@ -60,6 +60,8 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
         setShowListDialog(false);
     };
 
+    const nodesLength = props.dag.nodes().length;
+
     return (
         <div>
             <a id="downloadAnchorElem" style={{ display: 'none' }} />
@@ -84,7 +86,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                     <Input value={saveName} onChange={(e) => setSaveName(e.target.value)} placeholder="Flow Name" />
                 </Modal>
                 <Button
-                    disabled={props.dag.nodes.length < 1}
+                    disabled={nodesLength < 1}
                     type="link"
                     className={"mar-8"}
                     icon={<DeploymentUnitOutlined />}
@@ -106,7 +108,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                     }
                 />
                 <Button
-                    disabled={props.dag.nodes.length < 1}
+                    disabled={nodesLength < 1}
                     type="link"
                     className={"mar-8"}
                     icon={<PlayCircleOutlined />}
@@ -126,7 +128,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                     <Button type="link" className={"mar-8"} icon={<ImportOutlined />} />
                 </Upload>
                 <Button
-                    disabled={props.dag.nodes.length < 1}
+                    disabled={nodesLength < 1}
                     type="link"
                     className={"mar-8"}
                     icon={<DownloadOutlined />}
