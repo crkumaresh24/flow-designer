@@ -47,7 +47,7 @@ const FlowTasksComponent = (): React.ReactElement => {
     };
 
     return (
-        <div style={{ minWidth: 240 }}>
+        <div style={{ minWidth: 300, background: 'lightgray' }}>
             <Collapse>
                 {
                     Object.keys(registryComponents).map((category) => <Panel header={category} key={category} extra={genExtra()}>

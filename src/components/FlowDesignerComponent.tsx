@@ -250,89 +250,156 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
     });
 
     return (
-        <div className="designer">
+        <div className={'flex grow content-wrapper'}>
             {props.dag && (
-                <div className={'flex-grow content-wrapper'}>
-                    <div className={'overflow-container'}>
-                        <div
-                            onDragOver={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                            }}
-                            onDrop={(e) => onDrop(e)}
-                            className={'overflow-content'}
-                        >
-                            {props.dag.nodes().map((node: any) => {
-                                const task = props.dag.getNodeAttributes(node) as IDataFlowTask;
-                                if (task.type === 'START_TASK') {
-                                    return (
-                                        <div
-                                            draggable="true"
-                                            onDragStart={(event: any) => {
-                                                event.dataTransfer?.setData('taskId', task.id);
-                                                event.dataTransfer?.setData('taskType', task.type);
-                                            }}
-                                            onDragOver={(e: any) => {
+                <div className={'overflow-container'}>
+                    <div
+                        onDragOver={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }}
+                        onDrop={(e) => onDrop(e)}
+                        className={'overflow-content'}
+                    >
+                        {props.dag.nodes().map((node: any) => {
+                            const task = props.dag.getNodeAttributes(node) as IDataFlowTask;
+                            if (task.type === 'START_TASK') {
+                                return (
+                                    <div
+                                        draggable="true"
+                                        onDragStart={(event: any) => {
+                                            event.dataTransfer?.setData('taskId', task.id);
+                                            event.dataTransfer?.setData('taskType', task.type);
+                                        }}
+                                        onDragOver={(e: any) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                        }}
+                                        onDrop={(e: any) => {
+                                            if (
+                                                e.dataTransfer?.getData('taskType') === 'START_TASK' ||
+                                                e.dataTransfer?.getData('taskType') === 'STOP_TASK'
+                                            ) {
                                                 e.stopPropagation();
                                                 e.preventDefault();
-                                            }}
-                                            onDrop={(e: any) => {
-                                                if (
-                                                    e.dataTransfer?.getData('taskType') === 'START_TASK' ||
-                                                    e.dataTransfer?.getData('taskType') === 'STOP_TASK'
-                                                ) {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                } else {
-                                                    bindStart(e, task, taskElements[task.id]);
-                                                }
-                                            }}
-                                            style={{
-                                                position: 'absolute',
-                                                left: task.uiConfig.offsetX + 'px',
-                                                top: task.uiConfig.offsetY + 'px',
-                                                display: 'flex',
-                                                height: 56,
-                                                width: 56,
-                                                zIndex: 2,
-                                            }}
-                                        >
-                                            <Dropdown
-                                                trigger={['click']}
-                                                key={task.id}
-                                                overlay={
-                                                    <Menu
-                                                        onClick={(e) => {
-                                                            if (e.key === '1') {
-                                                                deleteTask(task);
-                                                            }
-                                                        }}
-                                                    >
-                                                        <Menu.Item key="1" icon={<DeleteFilled />}>
-                                                            Delete
+                                            } else {
+                                                bindStart(e, task, taskElements[task.id]);
+                                            }
+                                        }}
+                                        style={{
+                                            position: 'absolute',
+                                            left: task.uiConfig.offsetX + 'px',
+                                            top: task.uiConfig.offsetY + 'px',
+                                            display: 'flex',
+                                            height: 56,
+                                            width: 56,
+                                            zIndex: 2,
+                                        }}
+                                    >
+                                        <Dropdown
+                                            trigger={['click']}
+                                            key={task.id}
+                                            overlay={
+                                                <Menu
+                                                    onClick={(e) => {
+                                                        if (e.key === '1') {
+                                                            deleteTask(task);
+                                                        }
+                                                    }}
+                                                >
+                                                    <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                        Delete
                                                         </Menu.Item>
-                                                    </Menu>
-                                                }
-                                            >
-                                                <Button type="primary" shape="circle">
-                                                    S
+                                                </Menu>
+                                            }
+                                        >
+                                            <Button type="primary" shape="circle">
+                                                S
                                                 </Button>
-                                            </Dropdown>
-                                        </div>
-                                    );
-                                } else if (task.type === 'STOP_TASK') {
-                                    return (
+                                        </Dropdown>
+                                    </div>
+                                );
+                            } else if (task.type === 'STOP_TASK') {
+                                return (
+                                    <div
+                                        draggable="true"
+                                        onDragStart={(event) => {
+                                            event.dataTransfer?.setData('taskId', task.id);
+                                            event.dataTransfer?.setData('taskType', task.type);
+                                        }}
+                                        onDrop={(e) => {
+                                            if (
+                                                e.dataTransfer?.getData('taskType') === 'START_TASK' ||
+                                                e.dataTransfer?.getData('taskType') === 'STOP_TASK'
+                                            ) {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                            } else {
+                                                bindEnd(e, task);
+                                            }
+                                        }}
+                                        onDragOver={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                        }}
+                                        key={task.id}
+                                        style={{
+                                            position: 'absolute',
+                                            left: task.uiConfig.offsetX + 'px',
+                                            top: task.uiConfig.offsetY + 'px',
+                                            display: 'flex',
+                                            height: 56,
+                                            width: 56,
+                                            zIndex: 2,
+                                        }}
+                                    >
+                                        <Dropdown
+                                            key={task.id}
+                                            trigger={['click']}
+                                            overlay={
+                                                <Menu
+                                                    onClick={(e) => {
+                                                        if (e.key === '1') {
+                                                            deleteTask(task);
+                                                        }
+                                                    }}
+                                                >
+                                                    <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                        Delete
+                                                        </Menu.Item>
+                                                </Menu>
+                                            }
+                                        >
+                                            <Button type="primary" shape="circle">
+                                                E
+                                                </Button>
+                                        </Dropdown>
+                                    </div>
+                                );
+                            } else if (task.type) {
+                                return (
+                                    <div
+                                        className="flex center"
+                                        draggable="true"
+                                        onDragStart={(event) => {
+                                            event.dataTransfer?.setData('taskId', task.id);
+                                            event.dataTransfer?.setData('taskType', task.type);
+                                        }}
+                                        onDragOver={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                        }}
+                                        key={task.id}
+                                        style={{
+                                            position: 'absolute',
+                                            left: task.uiConfig.offsetX + 'px',
+                                            top: task.uiConfig.offsetY + 'px',
+                                            zIndex: 2,
+                                        }}
+                                    >
                                         <div
-                                            draggable="true"
-                                            onDragStart={(event) => {
-                                                event.dataTransfer?.setData('taskId', task.id);
-                                                event.dataTransfer?.setData('taskType', task.type);
-                                            }}
                                             onDrop={(e) => {
-                                                if (
-                                                    e.dataTransfer?.getData('taskType') === 'START_TASK' ||
-                                                    e.dataTransfer?.getData('taskType') === 'STOP_TASK'
-                                                ) {
+                                                if (e.dataTransfer?.getData('taskType') === task.type) {
                                                     e.stopPropagation();
                                                     e.preventDefault();
                                                 } else {
@@ -343,19 +410,23 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                 e.stopPropagation();
                                                 e.preventDefault();
                                             }}
-                                            key={task.id}
-                                            style={{
-                                                position: 'absolute',
-                                                left: task.uiConfig.offsetX + 'px',
-                                                top: task.uiConfig.offsetY + 'px',
-                                                display: 'flex',
-                                                height: 56,
-                                                width: 56,
-                                                zIndex: 2,
-                                            }}
                                         >
-                                            <Dropdown
-                                                key={task.id}
+                                            <Button type="primary" shape="circle">
+                                                A
+                                                </Button>
+                                        </div>
+                                        <div
+                                            onDrop={(e: any) => {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                            }}
+                                            style={{
+                                                padding: 16,
+                                            }}
+                                            ref={taskElements[task.id]}
+                                        >
+                                            <Dropdown.Button
+                                                icon={<DownOutlined />}
                                                 trigger={['click']}
                                                 overlay={
                                                     <Menu
@@ -367,245 +438,172 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                     >
                                                         <Menu.Item key="1" icon={<DeleteFilled />}>
                                                             Delete
-                                                        </Menu.Item>
+                                                            </Menu.Item>
                                                     </Menu>
                                                 }
+                                                onClick={() => setOpenTask(task.id)}
+                                                type="primary"
                                             >
-                                                <Button type="primary" shape="circle">
-                                                    E
-                                                </Button>
-                                            </Dropdown>
+                                                {task.type.split('_TASK')[0]}
+                                            </Dropdown.Button>
+                                            <Drawer
+                                                title={task.title}
+                                                placement="right"
+                                                closable={false}
+                                                width={task.uiConfig.taskPanelWidth}
+                                                visible={openTask === task.id}
+                                                onClose={() => {
+                                                    if (taskRequestsTraker[task.id]) {
+                                                        setTaskRequest(task, taskRequests[task.id]);
+                                                    }
+                                                    setOpenTask(undefined);
+                                                }}
+                                            >
+                                                <Task
+                                                    setTaskRequest={(req) => {
+                                                        taskRequests[task.id] = req;
+                                                        taskRequestsTraker[task.id] = true;
+                                                    }}
+                                                    task={task}
+                                                />
+                                            </Drawer>
                                         </div>
-                                    );
-                                } else if (task.type) {
-                                    return (
                                         <div
-                                            className="flex center"
-                                            draggable="true"
-                                            onDragStart={(event) => {
-                                                event.dataTransfer?.setData('taskId', task.id);
-                                                event.dataTransfer?.setData('taskType', task.type);
+                                            onDrop={(e) => {
+                                                if (e.dataTransfer?.getData('taskType') === task.type) {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                } else {
+                                                    bindStart(e, task, taskElements[task.id]);
+                                                }
                                             }}
+                                            id={task.id}
                                             onDragOver={(e) => {
                                                 e.stopPropagation();
                                                 e.preventDefault();
                                             }}
-                                            key={task.id}
-                                            style={{
-                                                position: 'absolute',
-                                                left: task.uiConfig.offsetX + 'px',
-                                                top: task.uiConfig.offsetY + 'px',
-                                                zIndex: 2,
-                                            }}
                                         >
-                                            <div
-                                                onDrop={(e) => {
-                                                    if (e.dataTransfer?.getData('taskType') === task.type) {
-                                                        e.stopPropagation();
-                                                        e.preventDefault();
-                                                    } else {
-                                                        bindEnd(e, task);
-                                                    }
-                                                }}
-                                                onDragOver={(e) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                }}
-                                            >
-                                                <Button type="primary" shape="circle">
-                                                    A
+                                            <Button type="primary" shape="circle">
+                                                B
                                                 </Button>
-                                            </div>
-                                            <div
-                                                onDrop={(e: any) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                }}
-                                                style={{
-                                                    padding: 16,
-                                                }}
-                                                ref={taskElements[task.id]}
-                                            >
-                                                <Dropdown.Button
-                                                    icon={<DownOutlined />}
-                                                    trigger={['click']}
-                                                    overlay={
-                                                        <Menu
-                                                            onClick={(e) => {
-                                                                if (e.key === '1') {
-                                                                    deleteTask(task);
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Menu.Item key="1" icon={<DeleteFilled />}>
-                                                                Delete
-                                                            </Menu.Item>
-                                                        </Menu>
-                                                    }
-                                                    onClick={() => setOpenTask(task.id)}
-                                                    type="primary"
-                                                >
-                                                    {task.type.split('_TASK')[0]}
-                                                </Dropdown.Button>
-                                                <Drawer
-                                                    title={task.title}
-                                                    placement="right"
-                                                    closable={false}
-                                                    width={task.uiConfig.taskPanelWidth}
-                                                    visible={openTask === task.id}
-                                                    onClose={() => {
-                                                        if (taskRequestsTraker[task.id]) {
-                                                            setTaskRequest(task, taskRequests[task.id]);
-                                                        }
-                                                        setOpenTask(undefined);
-                                                    }}
-                                                >
-                                                    <Task
-                                                        setTaskRequest={(req) => {
-                                                            taskRequests[task.id] = req;
-                                                            taskRequestsTraker[task.id] = true;
-                                                        }}
-                                                        task={task}
-                                                    />
-                                                </Drawer>
-                                            </div>
-                                            <div
-                                                onDrop={(e) => {
-                                                    if (e.dataTransfer?.getData('taskType') === task.type) {
-                                                        e.stopPropagation();
-                                                        e.preventDefault();
-                                                    } else {
-                                                        bindStart(e, task, taskElements[task.id]);
-                                                    }
-                                                }}
-                                                id={task.id}
-                                                onDragOver={(e) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                }}
-                                            >
-                                                <Button type="primary" shape="circle">
-                                                    B
-                                                </Button>
-                                            </div>
                                         </div>
-                                    );
-                                } else {
-                                    return <></>;
-                                }
-                            })}
+                                    </div>
+                                );
+                            } else {
+                                return <></>;
+                            }
+                        })}
 
-                            {props.dag.edges().map((edge) => {
-                                const attributes = props.dag.getEdgeAttributes(edge);
-                                const connector: IDataFlowConnector = {
-                                    id: edge,
-                                    radius: 8,
-                                    startTask: attributes.startTask,
-                                    endTask: attributes.endTask,
-                                    lx: attributes.lx,
-                                    ly: attributes.ly,
-                                    rx: attributes.rx,
-                                    ry: attributes.ry,
-                                };
-                                return (
-                                    <div key={connector.id}>
-                                        {!connector.startTask && (
-                                            <div
-                                                draggable="true"
-                                                onDragStart={(event) => {
-                                                    event.dataTransfer?.setData('taskId', connector.id);
-                                                    event.dataTransfer?.setData('taskType', 'START_CONNECTOR');
-                                                }}
-                                                onDragOver={(e) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                }}
-                                                style={{
-                                                    position: 'absolute',
-                                                    left: connector.lx + 'px',
-                                                    top: connector.ly + 'px',
-                                                }}
-                                            >
-                                                <div draggable={true}>
-                                                    <Button type="primary" shape="circle">
-                                                        B
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {!connector.endTask && (
-                                            <div
-                                                draggable="true"
-                                                onDragStart={(event) => {
-                                                    event.dataTransfer?.setData('taskId', connector.id);
-                                                    event.dataTransfer?.setData('taskType', 'STOP_CONNECTOR');
-                                                }}
-                                                onDragOver={(e) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                }}
-                                                style={{
-                                                    position: 'absolute',
-                                                    left: connector.rx + 'px',
-                                                    top: connector.ry + 'px',
-                                                }}
-                                            >
-                                                <div draggable={true}>
-                                                    <Button type="primary" shape="circle">
-                                                        A
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
+                        {props.dag.edges().map((edge) => {
+                            const attributes = props.dag.getEdgeAttributes(edge);
+                            const connector: IDataFlowConnector = {
+                                id: edge,
+                                radius: 8,
+                                startTask: attributes.startTask,
+                                endTask: attributes.endTask,
+                                lx: attributes.lx,
+                                ly: attributes.ly,
+                                rx: attributes.rx,
+                                ry: attributes.ry,
+                            };
+                            return (
+                                <div key={connector.id}>
+                                    {!connector.startTask && (
                                         <div
                                             draggable="true"
                                             onDragStart={(event) => {
                                                 event.dataTransfer?.setData('taskId', connector.id);
-                                                event.dataTransfer?.setData('taskType', 'CONNECTOR');
+                                                event.dataTransfer?.setData('taskType', 'START_CONNECTOR');
                                             }}
                                             onDragOver={(e) => {
                                                 e.stopPropagation();
                                                 e.preventDefault();
                                             }}
                                             style={{
-                                                height: 1,
-                                                backgroundColor: 'grey',
-                                                cursor: 'pointer',
-                                                width: getLength(connector) + 'px',
-                                                lineHeight: 1,
                                                 position: 'absolute',
-                                                left: getConnectorX(connector) + 'px',
-                                                top: getConnectorY(connector) + 'px',
-                                                transform: 'rotate(' + getAngle(connector) + 'deg)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
+                                                left: connector.lx + 'px',
+                                                top: connector.ly + 'px',
                                             }}
                                         >
-                                            <Dropdown
-                                                key={connector.id}
-                                                trigger={['click']}
-                                                overlay={
-                                                    <Menu
-                                                        onClick={(e) => {
-                                                            if (e.key === '1') {
-                                                                deleteConnector(connector);
-                                                            }
-                                                        }}
-                                                    >
-                                                        <Menu.Item key="1" icon={<DeleteFilled />}>
-                                                            Delete
-                                                        </Menu.Item>
-                                                    </Menu>
-                                                }
-                                            >
-                                                <DownOutlined />
-                                            </Dropdown>
+                                            <div draggable={true}>
+                                                <Button type="primary" shape="circle">
+                                                    B
+                                                    </Button>
+                                            </div>
                                         </div>
+                                    )}
+                                    {!connector.endTask && (
+                                        <div
+                                            draggable="true"
+                                            onDragStart={(event) => {
+                                                event.dataTransfer?.setData('taskId', connector.id);
+                                                event.dataTransfer?.setData('taskType', 'STOP_CONNECTOR');
+                                            }}
+                                            onDragOver={(e) => {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                left: connector.rx + 'px',
+                                                top: connector.ry + 'px',
+                                            }}
+                                        >
+                                            <div draggable={true}>
+                                                <Button type="primary" shape="circle">
+                                                    A
+                                                    </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div
+                                        draggable="true"
+                                        onDragStart={(event) => {
+                                            event.dataTransfer?.setData('taskId', connector.id);
+                                            event.dataTransfer?.setData('taskType', 'CONNECTOR');
+                                        }}
+                                        onDragOver={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                        }}
+                                        style={{
+                                            height: 1,
+                                            backgroundColor: '#1890ff',
+                                            cursor: 'pointer',
+                                            width: getLength(connector) + 'px',
+                                            lineHeight: 1,
+                                            position: 'absolute',
+                                            left: getConnectorX(connector) + 'px',
+                                            top: getConnectorY(connector) + 'px',
+                                            transform: 'rotate(' + getAngle(connector) + 'deg)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Dropdown
+                                            key={connector.id}
+                                            trigger={['click']}
+                                            overlay={
+                                                <Menu
+                                                    onClick={(e) => {
+                                                        if (e.key === '1') {
+                                                            deleteConnector(connector);
+                                                        }
+                                                    }}
+                                                >
+                                                    <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                        Delete
+                                                    </Menu.Item>
+                                                </Menu>
+                                            }
+                                        >
+                                            <DownOutlined style={{ color: '#1890ff' }} />
+                                        </Dropdown>
                                     </div>
-                                );
-                            })}
-                        </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             )}

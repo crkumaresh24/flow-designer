@@ -1,4 +1,5 @@
 import { BranchesOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 import React from 'react';
 import './App.css';
 import FlowTasksComponent from './components/FlowTasksComponent';
@@ -8,12 +9,13 @@ import MenuContainer from './conntainers/MenuContainer';
 const App = (): React.ReactElement => {
   return (
     <div className="flex flex-column">
-      <div className="menu-bar mar-left-8 mar-right-8 flex grow">
+      <div className="menu-bar mar-left-8 mar-right-8 flex">
         <BranchesOutlined />
         {<div className="grow mar-left-8">{'Flow Designer'}</div>}
-        <MenuContainer />
       </div>
-      <div className="flex">
+      <Divider style={{ margin: 'unset' }} />
+      <div className="flex designer">
+        <MenuContainer />
         <FlowTasksComponent />
         <FlowDesignerContainer />
       </div>

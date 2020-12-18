@@ -12,9 +12,9 @@ export const setDAG = (dag: DirectedGraph): ReduxAction => ({
     },
 });
 
-export const setDataFlow = (dataFlow: IFlowMetadata): ReduxAction => ({
+export const setFlow = (flow: IFlowMetadata): ReduxAction => ({
     type: SET_FLOW_ACTION.request,
     payload: {
-        dataFlow,
+        flow,
     },
 });

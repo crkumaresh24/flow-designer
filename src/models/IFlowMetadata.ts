@@ -24,7 +24,7 @@ export interface IDataFlowConnector {
 }
 
 export interface IFlowMetadata {
-    id?: number;
-    dag: DirectedGraph;
+    id?: string;
+    dag?: DirectedGraph;
     name: string;
 }
