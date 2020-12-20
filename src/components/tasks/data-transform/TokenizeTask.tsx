@@ -1,6 +1,6 @@
 import { Form, Input, Switch } from 'antd';
 import React from 'react';
-import { onFieldsChange, TasksProps } from '../../Task';
+import { onFieldsChange, TasksProps } from '../Task';
 
 const TokenizerTask = (props: TasksProps): React.ReactElement => {
     return (

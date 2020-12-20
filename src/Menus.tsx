@@ -1,17 +1,19 @@
-import { DeploymentUnitOutlined, DownloadOutlined, FolderOpenFilled, ImportOutlined, PlayCircleOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space, Upload } from 'antd';
+import { DeploymentUnitOutlined, DownloadOutlined, FolderOpenFilled, PlayCircleOutlined, SaveOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Divider, Input, Modal, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { DirectedGraph } from 'graphology';
 import React from 'react';
-import FlowsListComponent from './components/FlowsListComponent';
-import { JAR_ARTIFACTORY_URL, LIVY_SYSTEM_URL } from './globals';
+import FlowListComponent from './components/FlowsListComponent';
 import { IFlowMetadata } from './models/IFlowMetadata';
 
 export interface MenusComponentProps {
     dag: DirectedGraph;
     flow: IFlowMetadata;
+    flows: IFlowMetadata[];
+    toggleOpenTools: () => void;
     setDAG: (dag: DirectedGraph) => void;
     setFlow: (flow: IFlowMetadata) => void;
+    fetchFlows: (flow?: IFlowMetadata) => void;
 }
 
 const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
@@ -26,7 +28,16 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
 
     const handleSaveOk = () => {
         if (saveName && saveName.length > 0) {
-            saveFlow(saveName, props.dag, props.setFlow);
+            saveFlow(saveName, props.dag, (flow: IFlowMetadata) => {
+                if (flow.dag) {
+                    props.setFlow({
+                        id: flow.id,
+                        name: flow.name,
+                        dag: DirectedGraph.from(flow.dag)
+                    });
+                }
+                props.fetchFlows();
+            });
         }
         setSaveName(undefined);
         setShowSaveDialog(false);
@@ -40,6 +51,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
     const [showListDialog, setShowListDialog] = React.useState<boolean>(false);
 
     const showListModal = () => {
+        props.fetchFlows(props.flow);
         setSaveName(undefined);
         setShowListDialog(true);
     };
@@ -60,35 +72,54 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
         setShowListDialog(false);
     };
 
-    const nodesLength = props.dag.nodes().length;
+    const nodesLength = props.dag.nodes !== undefined ? props.dag.nodes().length : 0;
+
+    React.useEffect(() => {
+        props.fetchFlows();
+    }, []);
 
     return (
-        <div>
+        <div className="menu-bar pad-top-8">
             <a id="downloadAnchorElem" style={{ display: 'none' }} />
             <div className="flex flex-column">
-                <Button className={"mar-left-8 mar-bottom-8"} type="link" icon={<FolderOpenFilled />} onClick={showListModal} />
-                <Modal title="List" visible={showListDialog} onOk={handleListOk} onCancel={handleListCancel}>
-                    <FlowsListComponent
+                <Button className={"mar-left-8 white mar-bottom-8"} type="link" icon={<ToolOutlined />} onClick={props.toggleOpenTools} />
+                <Divider className="no-mar white" />
+                <Button className={"mar-left-8 white mar-bottom-8"} type="link" icon={<FolderOpenFilled />} onClick={showListModal} />
+                <Modal title="Flows" footer={null} visible={showListDialog} onOk={handleListOk} onCancel={handleListCancel}>
+                    <FlowListComponent
+                        flows={props.flows}
                         deleteFlow={(flow: IFlowMetadata) => {
-                            handleListOk();
-                            flow.id && deleteFlow(flow.id);
+                            flow.id && deleteFlow(flow.id, () => {
+                                props.fetchFlows();
+                            });
                         }}
                         openFlow={(flow) => {
                             handleListOk();
                             props.setFlow(flow)
                         }} />
                 </Modal>
-                {props.flow.id === undefined && <Button className={"mar-8"} icon={<SaveOutlined />} type="link" onClick={showSaveModal} />}
-                {props.flow.id !== undefined && <Button className={"mar-8"} icon={<SaveOutlined />} type="link" onClick={() => {
-                    props.flow.id !== undefined && updateFlow(props.flow.id, props.dag, props.setFlow);
+                <Divider className="no-mar white" />
+                {props.flow.id === undefined && <Button disabled={nodesLength < 1} className={"white mar-8"} icon={<SaveOutlined />} type="link" onClick={showSaveModal} />}
+                <Divider className="no-mar white" />
+                {props.flow.id !== undefined && <Button disabled={nodesLength < 1} className={"white mar-8"} icon={<SaveOutlined />} type="link" onClick={() => {
+                    props.flow.id !== undefined && updateFlow(props.flow.id, props.dag, (flow: IFlowMetadata) => {
+                        if (flow.dag) {
+                            props.setFlow({
+                                id: flow.id,
+                                name: flow.name,
+                                dag: DirectedGraph.from(flow.dag)
+                            });
+                        }
+                    });
                 }} />}
                 <Modal title="Save As" visible={showSaveDialog} onOk={handleSaveOk} onCancel={handleSaveCancel}>
                     <Input value={saveName} onChange={(e) => setSaveName(e.target.value)} placeholder="Flow Name" />
                 </Modal>
+                <Divider className="no-mar white" />
                 <Button
                     disabled={nodesLength < 1}
                     type="link"
-                    className={"mar-8"}
+                    className={"white mar-8"}
                     icon={<DeploymentUnitOutlined />}
                     onClick={() =>
                         Modal.success({
@@ -107,16 +138,18 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                         })
                     }
                 />
+                <Divider className="no-mar white" />
                 <Button
                     disabled={nodesLength < 1}
                     type="link"
-                    className={"mar-8"}
+                    className={"white mar-8"}
                     icon={<PlayCircleOutlined />}
                     onClick={() => {
-                        submitLivy();
+                        props.flow.id && submitLivy(props.flow.id);
                     }
                     }
                 />
+                <Divider className="no-mar white" />
                 <Upload multiple={false}
                     showUploadList={false}
                     beforeUpload={(file: RcFile) => {
@@ -125,12 +158,13 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                         });
                         return false;
                     }}>
-                    <Button type="link" className={"mar-8"} icon={<ImportOutlined />} />
+                    <Button type="link" className={"white mar-8"} icon={<UploadOutlined />} />
                 </Upload>
+                <Divider className="no-mar white" />
                 <Button
                     disabled={nodesLength < 1}
                     type="link"
-                    className={"mar-8"}
+                    className={"white mar-8"}
                     icon={<DownloadOutlined />}
                     onClick={() => {
                         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(props.dag.toJSON(), null, 1));
@@ -148,7 +182,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
     );
 };
 
-const saveFlow = (name: string, dag: DirectedGraph, setFlow: (flow: IFlowMetadata) => void) => {
+const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
     fetch("http://localhost:9090/flow", {
         method: "POST",
         headers: {
@@ -159,15 +193,11 @@ const saveFlow = (name: string, dag: DirectedGraph, setFlow: (flow: IFlowMetadat
             dag,
         })
     }).then(response => response.json()).then(json => {
-        setFlow({
-            id: json.id,
-            name: name,
-            dag: DirectedGraph.from(json.dag)
-        });
+        onSuccess(json);
     })
 };
 
-const updateFlow = (id: string, dag: DirectedGraph, setFlow: (flow: IFlowMetadata) => void) => {
+const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
     fetch("http://localhost:9090/flow/" + id, {
         method: "PUT",
         headers: {
@@ -175,57 +205,23 @@ const updateFlow = (id: string, dag: DirectedGraph, setFlow: (flow: IFlowMetadat
         },
         body: JSON.stringify(dag.toJSON())
     }).then(response => response.json()).then(json => {
-        setFlow({
-            id: json.id,
-            name: name,
-            dag: DirectedGraph.from(json.dag)
-        });
+        onSuccess(json);
     })
 };
 
-const deleteFlow = (id: string) => {
+const deleteFlow = (id: string, onSuccess: () => void) => {
     fetch("http://localhost:9090/flow/" + id, {
         method: "DELETE",
     }).then(response => response.text()).then(json => {
-        console.log(json);
+        onSuccess();
     });
 };
 
-const submitLivy = () => {
-    fetch(LIVY_SYSTEM_URL, {
+const submitLivy = (flowId: string) => {
+    fetch("http://localhost:9090/flow/run/" + flowId, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        mode: "no-cors",
-        body: JSON.stringify({
-            file:
-                JAR_ARTIFACTORY_URL + "/core-1.0-SNAPSHOT.jar",
-            className: "com.stacksnow.flow.runner.spark.java.App",
-            conf: {
-                "spark.kubernetes.container.image": "apache-spark/spark:2.4.6",
-                "spark.executor.instances": "2",
-                // "spark.master": "local[*]",
-                // "spark.master": "k8s://https://kubernetes.docker.internal:6443",
-                "spark.kubernetes.authenticate.driver.serviceAccountName":
-                    "spark",
-                "spark.driver.extraClassPath":
-                    JAR_ARTIFACTORY_URL + "/postgresql-42.2.9.jar",
-                "spark.executor.extraClassPath":
-                    JAR_ARTIFACTORY_URL + "/postgresql-42.2.9.jar",
-            },
-            jars: [
-                JAR_ARTIFACTORY_URL + "/tasks-1.0-SNAPSHOT.jar",
-                JAR_ARTIFACTORY_URL + "/gson-2.2.4.jar",
-                JAR_ARTIFACTORY_URL + "/postgresql-42.2.9.jar",
-                JAR_ARTIFACTORY_URL + "/jgrapht-core-1.0.1.jar",
-            ],
-            args: [
-                JAR_ARTIFACTORY_URL + "/runnerList.json",
-                JAR_ARTIFACTORY_URL + "/jdbctest.json",
-            ],
-        }),
-    })
-        .then((response) => response.text())
-        .then((livy) => console.log(livy));
+    }).then(response => response.json()).then(json => console.log(json));
 };
 
 export default MenusComponent;

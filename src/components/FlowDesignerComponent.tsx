@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Menu, Dropdown, Button, Drawer } from 'antd';
-import { DownOutlined, DeleteFilled } from '@ant-design/icons';
+import { DownOutlined, DeleteFilled, CreditCardOutlined } from '@ant-design/icons';
 import { create_UUID } from '../helpers/ReduxHelpers';
 import { DirectedGraph } from 'graphology';
 import { IDataFlowConnector, IDataFlowTask } from '../models/IFlowMetadata';
-import Task from './Task';
+import Task from './tasks/Task';
 
 export interface DataFlowDesignerComponentProps {
     dag: DirectedGraph;
@@ -447,7 +447,10 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                 {task.type.split('_TASK')[0]}
                                             </Dropdown.Button>
                                             <Drawer
-                                                title={task.title}
+                                                title={<div className="flex vcenter">
+                                                    <CreditCardOutlined className="mar-right-8" />
+                                                    {task.title}
+                                                </div>}
                                                 placement="right"
                                                 closable={false}
                                                 width={task.uiConfig.taskPanelWidth}

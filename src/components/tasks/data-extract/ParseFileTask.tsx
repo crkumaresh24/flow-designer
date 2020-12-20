@@ -1,6 +1,6 @@
 import { Col, Form, Input, Row, Select, Switch } from 'antd';
 import React from 'react';
-import { FieldData, StoreValue, TasksProps } from '../../Task';
+import { FieldData, StoreValue, TasksProps } from '../Task';
 
 const ParseFileTask = (props: TasksProps): React.ReactElement => {
     return (

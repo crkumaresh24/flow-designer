@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { IDataFlowTask } from '../models/IFlowMetadata';
+import { IDataFlowTask } from '../../models/IFlowMetadata';
 import { registryComponents } from './TaskRegistry';
 
 export declare type InternalNamePath = (string | number)[];

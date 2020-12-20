@@ -8,9 +8,29 @@
     flex-direction: column;
 }
 
+.white {
+    color: white;
+}
+
+.title-bar {
+    background-color: dimgray;
+    color: white;
+    min-height: 40px;
+    max-height: 40px;
+    align-items: center;
+}
+
 .menu-bar {
-    min-height: 48px;
-    max-height: 48px;
+    background-color: gray;
+    color: #FBFCFC;
+}
+
+.tool-bar {
+    min-width: 300px;
+    background-color: lightgray;
+}
+
+.vcenter {
     align-items: center;
 }
 
@@ -21,6 +41,10 @@
 
 .grow {
     flex-grow: 1;
+}
+
+.no-mar {
+    margin: unset;
 }
 
 .mar-auto-left {
@@ -71,6 +95,10 @@
     padding: 8px;
 }
 
+.pad-top-8 {
+    padding-top: 8px;
+}
+
 .pad-bottom-8 {
     padding-bottom: 8px;
 }
@@ -84,7 +112,7 @@
 }
 
 .designer {
-   max-height: calc(100vh - 48px);
+    max-height: calc(100vh - 40px);
 }
 
 .content-wrapper {

@@ -1,13 +1,13 @@
 import { ConsoleSqlOutlined, ExpandAltOutlined, FilePptOutlined, TableOutlined } from "@ant-design/icons";
 import React from "react";
 import { TaskComponent } from "./Task";
-import ParseFileTask from "./tasks/data-extract/ParseFileTask";
-import ReadJDBCTableTask from "./tasks/data-extract/ReadJDBCTableTask";
-import ReadTableTask from "./tasks/data-extract/ReadTableTask";
-import CreateTableTask from "./tasks/data-load/CreateTableTask";
-import WriteJDBCTableTask from "./tasks/data-load/WriteJDBCTableTask";
-import StopWordsRemoverTask from "./tasks/data-transform/RemoveStopWordsTask";
-import TokenizerTask from "./tasks/data-transform/TokenizeTask";
+import ParseFileTask from "./data-extract/ParseFileTask";
+import ReadJDBCTableTask from "./data-extract/ReadJDBCTableTask";
+import ReadTableTask from "./data-extract/ReadTableTask";
+import CreateTableTask from "./data-load/CreateTableTask";
+import WriteJDBCTableTask from "./data-load/WriteJDBCTableTask";
+import StopWordsRemoverTask from "./data-transform/RemoveStopWordsTask";
+import TokenizerTask from "./data-transform/TokenizeTask";
 
 export const registryComponents: Record<string, TaskComponent[]> = {
     "Basic": [
@@ -27,7 +27,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             taskComponent: <ExpandAltOutlined />
         }
     ],
-    "Data Extract": [
+    "Extract": [
         {
             title: "PARSE_FILE",
             type: "PARSE_FILE_TASK",
@@ -48,22 +48,22 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             panelComponent: ReadJDBCTableTask
         },
     ],
-    "Data Transform": [
+    "Transform": [
         {
-            title: "TOKENIZE",
-            type: "TOKENIZE_TASK",
+            title: "TOKENIZER",
+            type: "TOKENIZER_TASK",
             taskComponent: <span>T</span>,
             panelComponent: TokenizerTask,
             panelWidth: 560,
         },
         {
-            title: "REMOVE_STOP_WORDS",
-            type: "REMOVE_STOP_WORDS_TASK",
+            title: "STOPWORDS_REMOVER",
+            type: "STOPWORDS_REMOVER_TASK",
             taskComponent: <span>S</span>,
             panelComponent: StopWordsRemoverTask
         },
     ],
-    "Data Load": [
+    "Load": [
         {
             title: "CREATE_TABLE",
             type: "CREATE_TABLE_TASK",

@@ -5,10 +5,15 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import App from './App';
 import reducer from './reducers';
+import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, createStore } from 'redux';
 import { logger } from 'redux-logger';
+import rootSaga from './sagas';
 
-const store = createStore(reducer, applyMiddleware(logger));
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger));
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>

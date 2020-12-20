@@ -1,2 +1,1 @@
-export const JAR_ARTIFACTORY_URL = "http://localhost:8000";
-export const LIVY_SYSTEM_URL = "http://localhost:8998/batches";
+export const BACKEND_URL = 'http://localhost:9090/flow';

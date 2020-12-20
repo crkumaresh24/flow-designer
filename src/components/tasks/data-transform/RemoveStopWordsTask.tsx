@@ -1,6 +1,6 @@
 import { Form, Input } from 'antd';
 import React from 'react';
-import { onFieldsChange, TasksProps } from '../../Task';
+import { onFieldsChange, TasksProps } from '../Task';
 
 const StopWordsRemoverTask = (props: TasksProps): React.ReactElement => {
     return (

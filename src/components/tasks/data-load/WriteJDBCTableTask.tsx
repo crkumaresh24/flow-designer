@@ -1,6 +1,6 @@
-import { Form, Input, Select } from 'antd';
+import { Form, Input, Radio, Select } from 'antd';
 import React from 'react';
-import { TasksProps, onFieldsChange } from '../../Task';
+import { TasksProps, onFieldsChange } from '../Task';
 
 const WriteJDBCTableTask = (props: TasksProps): React.ReactElement => {
     return (
@@ -28,6 +28,10 @@ const WriteJDBCTableTask = (props: TasksProps): React.ReactElement => {
                     name: ['dbtable'],
                     value: props.task.request.dbtable || 'public.test_table',
                 },
+                {
+                    name: ['mode'],
+                    value: props.task.request.mode || 'error',
+                },
             ]}
             onFieldsChange={(changedFields, allFields) => onFieldsChange(changedFields, allFields, props)}
         >
@@ -53,6 +57,14 @@ const WriteJDBCTableTask = (props: TasksProps): React.ReactElement => {
                 rules={[{ required: true, message: 'table name is required!' }]}
             >
                 <Input />
+            </Form.Item>
+            <Form.Item name="mode" label="Write Mode" rules={[{ required: true }]}>
+                <Radio.Group>
+                    <Radio value={"overwrite"}>Overwrite</Radio>
+                    <Radio value={"append"}>Append</Radio>
+                    <Radio value={"error"}>Error_If_Exists</Radio>
+                    <Radio value={"ignore"}>Ignore_If_Exists</Radio>
+                </Radio.Group>
             </Form.Item>
         </Form>
     );

@@ -1,22 +1,22 @@
-import { BranchesOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
+
 import React from 'react';
 import './App.css';
 import FlowTasksComponent from './components/FlowTasksComponent';
 import FlowDesignerContainer from './conntainers/FlowDesignerContainer';
 import MenuContainer from './conntainers/MenuContainer';
+import TitleBarContainer from './conntainers/TitleBarContainer';
 
 const App = (): React.ReactElement => {
+
+  const [openTools, setOpenTools] = React.useState(false);
+  const toggleOpenTools = () => setOpenTools(!openTools);
+
   return (
     <div className="flex flex-column">
-      <div className="menu-bar mar-left-8 mar-right-8 flex">
-        <BranchesOutlined />
-        {<div className="grow mar-left-8">{'Flow Designer'}</div>}
-      </div>
-      <Divider style={{ margin: 'unset' }} />
+      <TitleBarContainer />
       <div className="flex designer">
-        <MenuContainer />
-        <FlowTasksComponent />
+        <MenuContainer toggleOpenTools={toggleOpenTools} />
+        {openTools && <FlowTasksComponent />}
         <FlowDesignerContainer />
       </div>
     </div>

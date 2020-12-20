@@ -1,6 +1,6 @@
 import { Form, Input } from 'antd';
 import React from 'react';
-import { TasksProps, onFieldsChange } from '../../Task';
+import { TasksProps, onFieldsChange } from '../Task';
 
 const ReadTableTask = (props: TasksProps): React.ReactElement => {
     return (

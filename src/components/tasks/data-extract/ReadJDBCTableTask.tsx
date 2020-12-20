@@ -1,6 +1,8 @@
-import { Form, Input, Select } from 'antd';
+import { Collapse, Form, Input, Select } from 'antd';
 import React from 'react';
-import { onFieldsChange, TasksProps } from '../../Task';
+import { onFieldsChange, TasksProps } from '../Task';
+
+const { Panel } = Collapse;
 
 const ReadJDBCTableTask = (props: TasksProps): React.ReactElement => {
     return (
@@ -28,6 +30,22 @@ const ReadJDBCTableTask = (props: TasksProps): React.ReactElement => {
                     name: ['dbtable'],
                     value: props.task.request.dbtable || 'public.resource.types',
                 },
+                {
+                    name: ['numPartitions'],
+                    value: props.task.request.numPartitions,
+                },
+                {
+                    name: ['partitionColumn'],
+                    value: props.task.request.partitionColumn,
+                },
+                {
+                    name: ['lowerBound'],
+                    value: props.task.request.lowerBound,
+                },
+                {
+                    name: ['upperBound'],
+                    value: props.task.request.upperBound,
+                },
             ]}
             onFieldsChange={(changedFields, allFields) => onFieldsChange(changedFields, allFields, props)}
         >
@@ -54,6 +72,22 @@ const ReadJDBCTableTask = (props: TasksProps): React.ReactElement => {
             >
                 <Input />
             </Form.Item>
+            <Collapse>
+                <Panel header="Partitioned Read (Advanced) " key="1">
+                    <Form.Item name="numPartitions" label="Number of Partitions">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="partitionColumn" label="Partition Column">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="lowerBound" label="Lower Bound">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="upperBound" label="Upper Bound">
+                        <Input />
+                    </Form.Item>
+                </Panel>
+            </Collapse>,
         </Form>
     );
 };

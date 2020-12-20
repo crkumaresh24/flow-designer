@@ -1,21 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Collapse } from 'antd';
-import {
-    SettingOutlined,
-} from '@ant-design/icons';
+import { Button, Collapse, Tooltip } from 'antd';
 import React from 'react';
 import { ButtonShape } from 'antd/lib/button';
-import { registryComponents } from './TaskRegistry';
-import { TaskComponent } from './Task';
+import { registryComponents } from './tasks/TaskRegistry';
+import { TaskComponent } from './tasks/Task';
 
 const { Panel } = Collapse;
 
 const genExtra = () => (
-    <SettingOutlined
-        onClick={(event) => {
-            event.stopPropagation();
-        }}
-    />
+    <div></div>
 );
 
 const FlowTasksComponent = (): React.ReactElement => {
@@ -26,29 +19,31 @@ const FlowTasksComponent = (): React.ReactElement => {
 
     const getTask = (taskName: string, width: number, element: React.ReactElement, buttonShape?: ButtonShape) => {
         return (
-            <div
-                key={taskName}
-                draggable={true}
-                onDragOver={(e) => e.stopPropagation()}
-                onDragStart={(e: any) => taskDragStart(e, taskName, width)}
-            >
-                {buttonShape && (
-                    <Button className="mar-8" shape={buttonShape} type="primary">
-                        {element}
-                    </Button>
-                )}
-                {!buttonShape && (
-                    <Button className="mar-8" type="primary">
-                        {element}
-                    </Button>
-                )}
-            </div>
+            <Tooltip title={taskName}>
+                <div
+                    key={taskName}
+                    draggable={true}
+                    onDragOver={(e) => e.stopPropagation()}
+                    onDragStart={(e: any) => taskDragStart(e, taskName, width)}
+                >
+                    {buttonShape && (
+                        <Button className="mar-8" shape={buttonShape} type="ghost">
+                            {element}
+                        </Button>
+                    )}
+                    {!buttonShape && (
+                        <Button className="mar-8" type="ghost">
+                            {element}
+                        </Button>
+                    )}
+                </div>
+            </Tooltip>
         );
     };
 
     return (
-        <div style={{ minWidth: 300, background: 'lightgray' }}>
-            <Collapse>
+        <div className="tool-bar">
+            <Collapse defaultActiveKey="Basic">
                 {
                     Object.keys(registryComponents).map((category) => <Panel header={category} key={category} extra={genExtra()}>
                         <div className="flex">
