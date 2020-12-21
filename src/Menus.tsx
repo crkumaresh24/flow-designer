@@ -4,6 +4,7 @@ import { RcFile } from 'antd/lib/upload';
 import { DirectedGraph } from 'graphology';
 import React from 'react';
 import FlowListComponent from './components/FlowsListComponent';
+import { BACKEND_URL } from './globals';
 import { IFlowMetadata } from './models/IFlowMetadata';
 
 export interface MenusComponentProps {
@@ -184,7 +185,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
 };
 
 const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
-    fetch("http://localhost:9090/flow", {
+    fetch(BACKEND_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -199,7 +200,7 @@ const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
 };
 
 const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
-    fetch("http://localhost:9090/flow/" + id, {
+    fetch(BACKEND_URL + "/" + + id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -211,7 +212,7 @@ const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
 };
 
 const deleteFlow = (id: string, onSuccess: () => void) => {
-    fetch("http://localhost:9090/flow/" + id, {
+    fetch(BACKEND_URL + "/" + id, {
         method: "DELETE",
     }).then(response => response.text()).then(json => {
         onSuccess();
@@ -219,7 +220,7 @@ const deleteFlow = (id: string, onSuccess: () => void) => {
 };
 
 const submitLivy = (flowId: string) => {
-    fetch("http://localhost:9090/flow/run/" + flowId, {
+    fetch(BACKEND_URL + "/run/" + flowId, {
         method: "POST",
         headers: { "content-type": "application/json" },
     }).then(response => response.json()).then(json => console.log(json));
