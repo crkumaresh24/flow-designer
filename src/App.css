@@ -13,7 +13,7 @@
 }
 
 .title-bar {
-    background-color: dimgray;
+    background-color: #3171CF;
     color: white;
     min-height: 40px;
     max-height: 40px;
@@ -21,7 +21,7 @@
 }
 
 .menu-bar {
-    background-color: gray;
+    background-color: #3473CD;
     color: #FBFCFC;
 }
 

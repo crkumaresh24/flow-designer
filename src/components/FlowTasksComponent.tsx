@@ -19,7 +19,7 @@ const FlowTasksComponent = (): React.ReactElement => {
 
     const getTask = (taskName: string, width: number, element: React.ReactElement, buttonShape?: ButtonShape) => {
         return (
-            <Tooltip title={taskName}>
+            <Tooltip title={taskName.split("_TASK")[0]}>
                 <div
                     key={taskName}
                     draggable={true}

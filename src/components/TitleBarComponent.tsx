@@ -19,12 +19,14 @@ const TitleBarComponent = (props: TitleBarComponentProps): React.ReactElement =>
             </Title>
         </div>
         <div className="flex vcenter mar-right-16">
-            <Button icon={<PlusOutlined />} onClick={() => props.setFlow({
+            <Button icon={<PlusOutlined />} 
+            size="small"
+            onClick={() => props.setFlow({
                 name: 'untitled*',
                 dag: new DirectedGraph()
             })}
                 disabled={!props.flow.id}
-                className="mar-right-16">{"New"}</Button>
+                className="mar-right-16">{"New Flow"}</Button>
             <Title style={{ color: 'white', margin: 'unset', marginLeft: 16 }} level={5}>Kumaresh Ramakrishnan</Title>
             <UserOutlined className="mar-left-8 white" />
         </div>

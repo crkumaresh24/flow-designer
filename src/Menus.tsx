@@ -79,10 +79,11 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
     }, []);
 
     return (
-        <div className="menu-bar pad-top-8">
+        <div className="menu-bar">
+            <Divider className="no-mar" />
             <a id="downloadAnchorElem" style={{ display: 'none' }} />
             <div className="flex flex-column">
-                <Button className={"mar-left-8 white mar-bottom-8"} type="link" icon={<ToolOutlined />} onClick={props.toggleOpenTools} />
+                <Button className={"mar-left-8 pad-top-8 white mar-bottom-8"} type="link" icon={<ToolOutlined />} onClick={props.toggleOpenTools} />
                 <Divider className="no-mar white" />
                 <Button className={"mar-left-8 white mar-bottom-8"} type="link" icon={<FolderOpenFilled />} onClick={showListModal} />
                 <Modal title="Flows" footer={null} visible={showListDialog} onOk={handleListOk} onCancel={handleListCancel}>
