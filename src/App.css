@@ -23,6 +23,8 @@
 .menu-bar {
     background-color: #3473CD;
     color: #FBFCFC;
+    border-left: 0.1px solid antiquewhite;
+    border-top: 0.1px solid antiquewhite;
 }
 
 .tool-bar {

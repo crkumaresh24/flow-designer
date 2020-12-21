@@ -200,7 +200,7 @@ const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
 };
 
 const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
-    fetch(BACKEND_URL + "/" + + id, {
+    fetch(BACKEND_URL + "/" + id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

@@ -13,9 +13,9 @@ interface TitleBarComponentProps {
 const TitleBarComponent = (props: TitleBarComponentProps): React.ReactElement => {
     return (<div className="flex title-bar">
         <div className="flex vcenter grow mar-left-16">
-            <BranchesOutlined className="mar-right-8 white" />
+            <BranchesOutlined className="mar-right-16 white" />
             <Title style={{ color: 'white', margin: 'unset' }} level={5}>
-                ML/AI - OPS Designer - {props.flow.name}
+                ML/AI Studio - {props.flow.name}
             </Title>
         </div>
         <div className="flex vcenter mar-right-16">
