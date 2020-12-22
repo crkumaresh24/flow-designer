@@ -9,27 +9,25 @@
 }
 
 .white {
-    color: white;
+    color: #FFFFFF;
 }
 
 .title-bar {
-    background-color: #3171CF;
-    color: white;
+    background-color: #455A64;
+    color: #FFFFFF;
     min-height: 40px;
     max-height: 40px;
     align-items: center;
 }
 
 .menu-bar {
-    background-color: #3473CD;
+    background-color: #607D8B;
     color: #FBFCFC;
-    border-left: 0.1px solid antiquewhite;
-    border-top: 0.1px solid antiquewhite;
 }
 
 .tool-bar {
     min-width: 300px;
-    background-color: lightgray;
+    background-color: #ECEFF1;
 }
 
 .vcenter {

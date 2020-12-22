@@ -32,8 +32,16 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
             const source = create_UUID();
             const target = create_UUID();
 
-            props.dag.addNode(source);
-            props.dag.addNode(target);
+            props.dag.addNode(source, {
+                uiConfig: {
+                    kind: 'CONNECTOR_START'
+                }
+            });
+            props.dag.addNode(target, {
+                uiConfig: {
+                    kind: 'CONNECTOR_END'
+                }
+            });
 
             if (taskId !== undefined && taskId.length > 0) {
                 props.dag.dropEdge(taskId);

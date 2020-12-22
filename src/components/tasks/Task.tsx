@@ -42,7 +42,11 @@ export interface TasksProps {
 export const onFieldsChange = (_changedFields: any, allFields: any, props: TasksProps): void => {
     const req: any = {};
     allFields.forEach((fieldData: FieldData) => {
-        req[fieldData.name.toString()] = fieldData.value;
+        if (fieldData.value && fieldData.value.length > 0) {
+            req[fieldData.name.toString()] = fieldData.value;
+        } else {
+            req[fieldData.name.toString()] = undefined;
+        }
     });
     props.setTaskRequest(req);
 };

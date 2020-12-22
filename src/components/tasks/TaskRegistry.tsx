@@ -8,6 +8,10 @@ import CreateTableTask from "./data-load/CreateTableTask";
 import WriteJDBCTableTask from "./data-load/WriteJDBCTableTask";
 import StopWordsRemoverTask from "./data-transform/RemoveStopWordsTask";
 import TokenizerTask from "./data-transform/TokenizeTask";
+import ColumnFilterTask from "./data-transform/ColumnFilterTask";
+import RowFilterTask from "./data-transform/RowFilterTask";
+import WriteModelTask from "./data-load/WriteModelTask";
+import LinearRegressionModelTask from "./ml-model/LinearRegressionModelTask";
 
 export const registryComponents: Record<string, TaskComponent[]> = {
     "Basic": [
@@ -62,6 +66,26 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             taskComponent: <span>S</span>,
             panelComponent: StopWordsRemoverTask
         },
+        {
+            title: "COLUMN_FILTER",
+            type: "COLUMN_FILTER_TASK",
+            taskComponent: <span>F</span>,
+            panelComponent: ColumnFilterTask
+        },
+        {
+            title: "ROW_FILTER",
+            type: "ROW_FILTER_TASK",
+            taskComponent: <span>R</span>,
+            panelComponent: RowFilterTask
+        },
+    ],
+    "ML Models": [
+        {
+            title: "LINEAR_REGRESSION",
+            type: "LINEAR_REGRESSION_TASK",
+            taskComponent: <span>LI</span>,
+            panelComponent: LinearRegressionModelTask
+        },
     ],
     "Load": [
         {
@@ -75,6 +99,13 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             type: "WRITE_JDBC_TABLE_TASK",
             taskComponent: <ConsoleSqlOutlined />,
             panelComponent: WriteJDBCTableTask,
+            panelWidth: 560,
+        },
+        {
+            title: "WRITE_MODEL",
+            type: "WRITE_MODEL_TASK",
+            taskComponent: <span>M</span>,
+            panelComponent: WriteModelTask,
             panelWidth: 560,
         },
     ]

@@ -32,19 +32,19 @@ const ReadJDBCTableTask = (props: TasksProps): React.ReactElement => {
                 },
                 {
                     name: ['numPartitions'],
-                    value: props.task.request.numPartitions,
+                    value: props.task.request.numPartitions || undefined,
                 },
                 {
                     name: ['partitionColumn'],
-                    value: props.task.request.partitionColumn,
+                    value: props.task.request.partitionColumn || undefined,
                 },
                 {
                     name: ['lowerBound'],
-                    value: props.task.request.lowerBound,
+                    value: props.task.request.lowerBound || undefined,
                 },
                 {
                     name: ['upperBound'],
-                    value: props.task.request.upperBound,
+                    value: props.task.request.upperBound || undefined,
                 },
             ]}
             onFieldsChange={(changedFields, allFields) => onFieldsChange(changedFields, allFields, props)}
