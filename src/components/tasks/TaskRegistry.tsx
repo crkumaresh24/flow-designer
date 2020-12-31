@@ -14,7 +14,7 @@ import WriteModelTask from "./data-load/WriteModelTask";
 import LinearRegressionModelTask from "./ml-model/LinearRegressionModelTask";
 
 export const registryComponents: Record<string, TaskComponent[]> = {
-    "Basic": [
+    "BASIC": [
         {
             title: "START",
             type: "START_TASK",
@@ -31,7 +31,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             taskComponent: <ExpandAltOutlined />
         }
     ],
-    "Extract": [
+    "EXTRACT": [
         {
             title: "PARSE_FILE",
             type: "PARSE_FILE_TASK",
@@ -52,7 +52,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             panelComponent: ReadJDBCTableTask
         },
     ],
-    "Transform": [
+    "TRANSFORM": [
         {
             title: "TOKENIZER",
             type: "TOKENIZER_TASK",
@@ -79,7 +79,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             panelComponent: RowFilterTask
         },
     ],
-    "ML Models": [
+    "ML MODELS": [
         {
             title: "LINEAR_REGRESSION",
             type: "LINEAR_REGRESSION_TASK",
@@ -87,7 +87,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             panelComponent: LinearRegressionModelTask
         },
     ],
-    "Load": [
+    "LOAD": [
         {
             title: "CREATE_TABLE",
             type: "CREATE_TABLE_TASK",

@@ -1,7 +1,7 @@
 import { DirectedGraph } from 'graphology';
 import { put, takeLatest } from 'redux-saga/effects';
 import { FETCH_FLOWS_ACTION } from '../actions/DesignerActions';
-import { BACKEND_URL } from '../globals';
+import { FLOWS_SERVICE_URL } from '../globals';
 import { ReduxAction } from '../helpers/ReduxHelpers';
 import { IFlowMetadata } from '../models/IFlowMetadata';
 
@@ -10,7 +10,7 @@ export function* flowsActionWatcher() {
 }
 
 function* fetchDataFlows(action: ReduxAction) {
-    const json = yield fetch(BACKEND_URL).then((response) => response.json());
+    const json = yield fetch(FLOWS_SERVICE_URL).then((response) => response.json());
     const flows = json.map((record: any) => ({
         id: record.id,
         name: record.name,

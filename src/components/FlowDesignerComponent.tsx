@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Menu, Dropdown, Button, Drawer } from 'antd';
-import { DownOutlined, DeleteFilled, CreditCardOutlined } from '@ant-design/icons';
+import { DownOutlined, DeleteFilled, CreditCardOutlined, FundViewOutlined } from '@ant-design/icons';
 import { create_UUID } from '../helpers/ReduxHelpers';
 import { DirectedGraph } from 'graphology';
 import { IDataFlowConnector, IDataFlowTask } from '../models/IFlowMetadata';
@@ -315,7 +315,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                         }
                                                     }}
                                                 >
-                                                    <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                    <Menu.Item key="1" icon={<DeleteFilled style={{ color: "indianred" }} />}>
                                                         Delete
                                                         </Menu.Item>
                                                 </Menu>
@@ -372,7 +372,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                         }
                                                     }}
                                                 >
-                                                    <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                    <Menu.Item key="1" icon={<DeleteFilled style={{ color: "indianred" }} />}>
                                                         Delete
                                                         </Menu.Item>
                                                 </Menu>
@@ -439,14 +439,17 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                 overlay={
                                                     <Menu
                                                         onClick={(e) => {
-                                                            if (e.key === '1') {
+                                                            if (e.key === '2') {
                                                                 deleteTask(task);
                                                             }
                                                         }}
                                                     >
-                                                        <Menu.Item key="1" icon={<DeleteFilled />}>
+                                                        <Menu.Item key="1" icon={<FundViewOutlined style={{ color: "#455A64" }} />}>
+                                                            View Task
+                                                        </Menu.Item>
+                                                        <Menu.Item key="2" icon={<DeleteFilled style={{ color: "indianred" }} />}>
                                                             Delete
-                                                            </Menu.Item>
+                                                        </Menu.Item>
                                                     </Menu>
                                                 }
                                                 onClick={() => setOpenTask(task.id)}

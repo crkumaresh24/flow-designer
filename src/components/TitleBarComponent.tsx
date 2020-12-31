@@ -4,6 +4,7 @@ import Title from 'antd/lib/typography/Title';
 import { IFlowMetadata } from '../models/IFlowMetadata';
 import { Button } from 'antd';
 import { DirectedGraph } from 'graphology';
+import ProcessContainer from '../containers/ProcessContainer';
 
 interface TitleBarComponentProps {
     flow: IFlowMetadata;
@@ -19,12 +20,13 @@ const TitleBarComponent = (props: TitleBarComponentProps): React.ReactElement =>
             </Title>
         </div>
         <div className="flex vcenter mar-right-16">
-            <Button icon={<PlusOutlined />} 
-            size="small"
-            onClick={() => props.setFlow({
-                name: 'untitled*',
-                dag: new DirectedGraph()
-            })}
+            <ProcessContainer />
+            <Button icon={<PlusOutlined />}
+                size="small"
+                onClick={() => props.setFlow({
+                    name: 'untitled*',
+                    dag: new DirectedGraph()
+                })}
                 disabled={!props.flow.id}
                 className="mar-right-16">{"New Flow"}</Button>
             <Title style={{ color: 'white', margin: 'unset', marginLeft: 16 }} level={5}>Kumaresh Ramakrishnan</Title>

@@ -2,9 +2,9 @@
 import React from 'react';
 import './App.css';
 import FlowTasksComponent from './components/FlowTasksComponent';
-import FlowDesignerContainer from './conntainers/FlowDesignerContainer';
-import MenuContainer from './conntainers/MenuContainer';
-import TitleBarContainer from './conntainers/TitleBarContainer';
+import FlowDesignerContainer from './containers/FlowDesignerContainer';
+import MenuContainer from './containers/MenuContainer';
+import TitleBarContainer from './containers/TitleBarContainer';
 
 const App = (): React.ReactElement => {
 

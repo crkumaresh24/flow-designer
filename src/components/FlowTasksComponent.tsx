@@ -43,7 +43,7 @@ const FlowTasksComponent = (): React.ReactElement => {
 
     return (
         <div className="tool-bar">
-            <Collapse defaultActiveKey="Basic">
+            <Collapse defaultActiveKey={["BASIC", "EXTRACT", "TRANSFORM", "ML MODELS", "LOAD"]}>
                 {
                     Object.keys(registryComponents).map((category) => <Panel header={category} key={category} extra={genExtra()}>
                         <div className="flex">

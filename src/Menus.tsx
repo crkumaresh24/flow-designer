@@ -4,7 +4,7 @@ import { RcFile } from 'antd/lib/upload';
 import { DirectedGraph } from 'graphology';
 import React from 'react';
 import FlowListComponent from './components/FlowsListComponent';
-import { BACKEND_URL } from './globals';
+import { FLOWS_SERVICE_URL } from './globals';
 import { IFlowMetadata } from './models/IFlowMetadata';
 
 export interface MenusComponentProps {
@@ -15,6 +15,7 @@ export interface MenusComponentProps {
     setDAG: (dag: DirectedGraph) => void;
     setFlow: (flow: IFlowMetadata) => void;
     fetchFlows: (flow?: IFlowMetadata) => void;
+    fetchProcesses: () => void;
 }
 
 const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
@@ -147,7 +148,9 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                     className={"white mar-8"}
                     icon={<PlayCircleOutlined />}
                     onClick={() => {
-                        props.flow.id && submitLivy(props.flow.id);
+                        props.flow.id && runFlow(props.flow.id, () => {
+                            props.fetchProcesses();
+                        });
                     }
                     }
                 />
@@ -185,7 +188,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
 };
 
 const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
-    fetch(BACKEND_URL, {
+    fetch(FLOWS_SERVICE_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -200,7 +203,7 @@ const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
 };
 
 const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
-    fetch(BACKEND_URL + "/" + id, {
+    fetch(FLOWS_SERVICE_URL + "/" + id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -212,18 +215,18 @@ const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
 };
 
 const deleteFlow = (id: string, onSuccess: () => void) => {
-    fetch(BACKEND_URL + "/" + id, {
+    fetch(FLOWS_SERVICE_URL + "/" + id, {
         method: "DELETE",
     }).then(response => response.text()).then(json => {
         onSuccess();
     });
 };
 
-const submitLivy = (flowId: string) => {
-    fetch(BACKEND_URL + "/run/" + flowId, {
+const runFlow = (flowId: string, onSuccess: () => void) => {
+    fetch(FLOWS_SERVICE_URL + "/run/" + flowId, {
         method: "POST",
         headers: { "content-type": "application/json" },
-    }).then(response => response.json()).then(json => console.log(json));
+    }).then(response => response.json()).then(json => onSuccess());
 };
 
 export default MenusComponent;

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { setDAG, setFlow, fetchFlows } from '../actions/DesignerActions';
+import { fetchProcesses } from '../actions/ProcessActions';
 import MenusComponent from '../Menus';
 import { IAppReducerState } from '../models/IAppReducerState';
 
@@ -13,6 +14,7 @@ const mapDispatchToProps = {
     setDAG,
     setFlow,
     fetchFlows,
+    fetchProcesses,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenusComponent);
