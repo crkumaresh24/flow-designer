@@ -11,21 +11,25 @@ React based UI app to design simple flow graph to automate chain of tasks
 ![Designer_Page_Drawer](https://user-images.githubusercontent.com/10774494/104192460-dbf97480-5444-11eb-9495-9b7b6859caed.jpg)
 
 
-# Installation
+# Developer Run
 
-1. NPM Run - 
+0. Prerequisite
 
-git clone https://github.com/crkumaresh24/flow-designer.git
-cd flow-designer
+The developer studio is integrated with Keycloak IAM OAuth2 Server for security. Hence, Keycloak OAuth server should be running locally and appropriate JSON installation cofig should be kept at public/keycloak.json
 
-yarn install
-yarn start
+1. NPM Run -   
 
-Open http://localhost:3000/ in browser
+git clone https://github.com/crkumaresh24/flow-designer.git  
+cd flow-designer  
+
+yarn install  
+yarn start  
+
+Open http://localhost:3000/ in browser  
 
 2. Docker Build and Run (Optional):
 
-docker build . -t flow-designer:1.0.0
-docker run -it -p 3000:80 flow-designer:1.0.0
+docker build . -t flow-designer:1.0.0  
+docker run -it -p 3000:80 flow-designer:1.0.0  
 
-Open http://localhost:3000/ in browser
+Open http://localhost:3000/ in browser  
