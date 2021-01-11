@@ -12,39 +12,39 @@ const ReadJDBCTableTask = (props: TasksProps): React.ReactElement => {
             fields={[
                 {
                     name: ['driver'],
-                    value: 'org.postgresql.Driver',
+                    value: props.task.request.driver,
                 },
                 {
                     name: ['url'],
-                    value: props.task.request.url || 'jdbc:postgresql://localhost/postgres',
+                    value: props.task.request.url,
                 },
                 {
                     name: ['user'],
-                    value: props.task.request.user || 'postgres',
+                    value: props.task.request.user,
                 },
                 {
                     name: ['password'],
-                    value: props.task.request.password || 'postgres',
+                    value: props.task.request.password,
                 },
                 {
                     name: ['dbtable'],
-                    value: props.task.request.dbtable || 'public.resource.types',
+                    value: props.task.request.dbtable,
                 },
                 {
                     name: ['numPartitions'],
-                    value: props.task.request.numPartitions || undefined,
+                    value: props.task.request.numPartitions,
                 },
                 {
                     name: ['partitionColumn'],
-                    value: props.task.request.partitionColumn || undefined,
+                    value: props.task.request.partitionColumn,
                 },
                 {
                     name: ['lowerBound'],
-                    value: props.task.request.lowerBound || undefined,
+                    value: props.task.request.lowerBound,
                 },
                 {
                     name: ['upperBound'],
-                    value: props.task.request.upperBound || undefined,
+                    value: props.task.request.upperBound,
                 },
             ]}
             onFieldsChange={(changedFields, allFields) => onFieldsChange(changedFields, allFields, props)}

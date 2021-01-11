@@ -19,9 +19,8 @@ const FlowTasksComponent = (): React.ReactElement => {
 
     const getTask = (taskName: string, width: number, element: React.ReactElement, buttonShape?: ButtonShape) => {
         return (
-            <Tooltip title={taskName.split("_TASK")[0]}>
+            <Tooltip key={taskName} title={taskName.split("_TASK")[0]}>
                 <div
-                    key={taskName}
                     draggable={true}
                     onDragOver={(e) => e.stopPropagation()}
                     onDragStart={(e: any) => taskDragStart(e, taskName, width)}
@@ -46,7 +45,7 @@ const FlowTasksComponent = (): React.ReactElement => {
             <Collapse defaultActiveKey={["BASIC", "EXTRACT", "TRANSFORM", "ML MODELS", "LOAD"]}>
                 {
                     Object.keys(registryComponents).map((category) => <Panel header={category} key={category} extra={genExtra()}>
-                        <div className="flex">
+                        <div key={category} className="flex flex-wrap">
                             {
                                 registryComponents[category].map((task: TaskComponent) => { return getTask(task.type, task.panelWidth || 480, task.taskComponent) })
                             }

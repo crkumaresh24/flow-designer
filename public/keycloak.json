@@ -1,0 +1,8 @@
+{
+    "realm": "mlops",
+    "auth-server-url": "http://host.docker.internal:8080/auth",
+    "ssl-required": "external",
+    "resource": "flow-designer",
+    "public-client": true,
+    "confidential-port": 0
+}

@@ -1,8 +1,14 @@
 import { Col, Form, Input, Row, Select, Switch } from 'antd';
 import React from 'react';
 import { FieldData, StoreValue, TasksProps } from '../Task';
+import { listLakeFiles } from '../utils/FetchUtils';
 
 const ParseFileTask = (props: TasksProps): React.ReactElement => {
+    const [files, setFiles] = React.useState<string[]>();
+
+    React.useEffect(() => {
+        listLakeFiles(setFiles);
+    }, []);
     return (
         <Form
             name="global_state"
@@ -73,7 +79,11 @@ const ParseFileTask = (props: TasksProps): React.ReactElement => {
                         label="File Path"
                         rules={[{ required: true, message: 'File ID is required!' }]}
                     >
-                        <Input />
+                        <Select>
+                            {
+                                files?.map(file => <Select.Option key={file} value={file}>{file}</Select.Option>)
+                            }
+                        </Select>
                     </Form.Item>
                 </Col>
             </Row>
@@ -153,6 +163,7 @@ const ParseFileTask = (props: TasksProps): React.ReactElement => {
                             <Select.Option value="yyyy-MM-dd">yyyy-MM-dd</Select.Option>
                             <Select.Option value="MM/dd/yyyy">MM/dd/yyyy</Select.Option>
                             <Select.Option value="dd-MM-yyyy">dd-MM-yyyy</Select.Option>
+                            <Select.Option value="yyyy-MM-dd HH:mm:ss.S">yyyy-MM-dd HH:mm:ss</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>

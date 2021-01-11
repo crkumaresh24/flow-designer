@@ -12,6 +12,8 @@ import ColumnFilterTask from "./data-transform/ColumnFilterTask";
 import RowFilterTask from "./data-transform/RowFilterTask";
 import WriteModelTask from "./data-load/WriteModelTask";
 import LinearRegressionModelTask from "./ml-model/LinearRegressionModelTask";
+import WriteESTask from "./data-load/WriteESTask";
+import KMeansClassificationModelTask from "./ml-model/KMeansClassificationModelTask";
 
 export const registryComponents: Record<string, TaskComponent[]> = {
     "BASIC": [
@@ -31,7 +33,7 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             taskComponent: <ExpandAltOutlined />
         }
     ],
-    "EXTRACT": [
+    "DATA SOURCES": [
         {
             title: "PARSE_FILE",
             type: "PARSE_FILE_TASK",
@@ -49,37 +51,49 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             title: "READ_JDBC_TABLE",
             type: "READ_JDBC_TABLE_TASK",
             taskComponent: <ConsoleSqlOutlined />,
-            panelComponent: ReadJDBCTableTask
+            panelComponent: ReadJDBCTableTask,
+            defaultValue: {
+                "driver": "org.postgresql.Driver",
+                "url": "jdbc:postgresql://localhost/postgres",
+                "user": "postgres",
+                "password": "postgres",
+                "dbtable": "postgres"
+            }
         },
     ],
-    "TRANSFORM": [
+    "NLP TRANSFORM": [
         {
             title: "TOKENIZER",
             type: "TOKENIZER_TASK",
-            taskComponent: <span>T</span>,
+            taskComponent: <span>TK</span>,
             panelComponent: TokenizerTask,
             panelWidth: 560,
         },
         {
             title: "STOPWORDS_REMOVER",
             type: "STOPWORDS_REMOVER_TASK",
-            taskComponent: <span>S</span>,
+            taskComponent: <span>SR</span>,
             panelComponent: StopWordsRemoverTask
         },
         {
             title: "COLUMN_FILTER",
             type: "COLUMN_FILTER_TASK",
-            taskComponent: <span>F</span>,
+            taskComponent: <span>CF</span>,
             panelComponent: ColumnFilterTask
         },
         {
             title: "ROW_FILTER",
             type: "ROW_FILTER_TASK",
-            taskComponent: <span>R</span>,
+            taskComponent: <span>RF</span>,
             panelComponent: RowFilterTask
         },
+        {
+            title: "UNION",
+            type: "UNION_TASK",
+            taskComponent: <span>UN</span>,
+        },
     ],
-    "ML MODELS": [
+    "REGRESSION MODELS": [
         {
             title: "LINEAR_REGRESSION",
             type: "LINEAR_REGRESSION_TASK",
@@ -87,7 +101,15 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             panelComponent: LinearRegressionModelTask
         },
     ],
-    "LOAD": [
+    "CLASSIFICATION MODELS": [
+        {
+            title: "K_MEANS",
+            type: "K_MEANS_TASK",
+            taskComponent: <span>K-M</span>,
+            panelComponent: KMeansClassificationModelTask
+        },
+    ],
+    "DATA TARGETS": [
         {
             title: "CREATE_TABLE",
             type: "CREATE_TABLE_TASK",
@@ -100,13 +122,32 @@ export const registryComponents: Record<string, TaskComponent[]> = {
             taskComponent: <ConsoleSqlOutlined />,
             panelComponent: WriteJDBCTableTask,
             panelWidth: 560,
+            defaultValue: {
+                "driver": "org.postgresql.Driver",
+                "url": "jdbc:postgresql://localhost/postgres",
+                "user": "postgres",
+                "password": "postgres",
+                "dbtable": "postgres"
+            }
         },
         {
             title: "WRITE_MODEL",
             type: "WRITE_MODEL_TASK",
-            taskComponent: <span>M</span>,
+            taskComponent: <span>ML</span>,
             panelComponent: WriteModelTask,
             panelWidth: 560,
+        },
+        {
+            title: "WRITE_ES",
+            type: "WRITE_ES_TASK",
+            taskComponent: <span>ES</span>,
+            panelComponent: WriteESTask,
+            panelWidth: 560,
+            defaultValue: {
+                "es_nodes": "localhost:9200",
+                "es_nodes_wan_only": true,
+                "mode": "overwrite"
+            }
         },
     ]
 }

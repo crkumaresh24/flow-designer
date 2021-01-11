@@ -5,6 +5,7 @@ import { IFlowMetadata } from '../models/IFlowMetadata';
 export const SET_DAG_ACTION: ActionTypes = registerAction('SET_DAG');
 export const FETCH_FLOWS_ACTION: ActionTypes = registerAction('FETCH_FLOWS');
 export const SET_FLOW_ACTION: ActionTypes = registerAction('SET_FLOW');
+export const SET_PROPERTIES_ACTION: ActionTypes = registerAction('SET_PROPERTIES');
 
 export const setDAG = (dag: DirectedGraph): ReduxAction => ({
     type: SET_DAG_ACTION.request,
@@ -25,4 +26,11 @@ export const setFlow = (flow: IFlowMetadata): ReduxAction => ({
     payload: {
         flow,
     },
+});
+
+export const setProperties = (properties: string): ReduxAction => ({
+    type: SET_PROPERTIES_ACTION.request,
+    payload: {
+        properties
+    }
 });

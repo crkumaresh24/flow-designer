@@ -1,5 +1,5 @@
-import { DeploymentUnitOutlined, DownloadOutlined, FolderOpenFilled, PlayCircleOutlined, SaveOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, Modal, Upload } from 'antd';
+import { BranchesOutlined, DeploymentUnitOutlined, DownloadOutlined, FolderOpenFilled, PlayCircleOutlined, SaveOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Divider, Input, Modal, Upload, notification } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { DirectedGraph } from 'graphology';
 import React from 'react';
@@ -30,12 +30,13 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
 
     const handleSaveOk = () => {
         if (saveName && saveName.length > 0) {
-            saveFlow(saveName, props.dag, (flow: IFlowMetadata) => {
+            saveFlow(saveName, props.dag, props.flow.jobProperties, (flow: IFlowMetadata) => {
                 if (flow.dag) {
                     props.setFlow({
                         id: flow.id,
                         name: flow.name,
-                        dag: DirectedGraph.from(flow.dag)
+                        dag: DirectedGraph.from(flow.dag),
+                        jobProperties: JSON.stringify(flow.jobProperties)
                     });
                 }
                 props.fetchFlows();
@@ -87,8 +88,21 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
             <div className="flex flex-column">
                 <Button className={"mar-left-8 pad-top-8 white mar-bottom-8"} type="link" icon={<ToolOutlined />} onClick={props.toggleOpenTools} />
                 <Divider className="no-mar white" />
+                <Button
+                    disabled={nodesLength < 1}
+                    type="link"
+                    className={"white mar-8"}
+                    icon={<PlayCircleOutlined />}
+                    onClick={() => {
+                        props.flow.id && runFlow(props.flow.id, () => {
+                            props.fetchProcesses();
+                        });
+                    }
+                    }
+                />
+                <Divider className="no-mar white" />
                 <Button className={"mar-left-8 white mar-bottom-8"} type="link" icon={<FolderOpenFilled />} onClick={showListModal} />
-                <Modal title="Flows" footer={null} visible={showListDialog} onOk={handleListOk} onCancel={handleListCancel}>
+                <Modal title={<><BranchesOutlined className={"mar-right-16"} />{"FLOWS"}</>} footer={null} visible={showListDialog} onOk={handleListOk} onCancel={handleListCancel}>
                     <FlowListComponent
                         flows={props.flows}
                         deleteFlow={(flow: IFlowMetadata) => {
@@ -105,12 +119,18 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                 {props.flow.id === undefined && <Button disabled={nodesLength < 1} className={"white mar-8"} icon={<SaveOutlined />} type="link" onClick={showSaveModal} />}
                 <Divider className="no-mar white" />
                 {props.flow.id !== undefined && <Button disabled={nodesLength < 1} className={"white mar-8"} icon={<SaveOutlined />} type="link" onClick={() => {
-                    props.flow.id !== undefined && updateFlow(props.flow.id, props.dag, (flow: IFlowMetadata) => {
+                    props.flow.id !== undefined && updateFlow(props.flow.id, props.dag, props.flow.jobProperties, (flow: IFlowMetadata) => {
                         if (flow.dag) {
                             props.setFlow({
-                                id: flow.id,
-                                name: flow.name,
-                                dag: DirectedGraph.from(flow.dag)
+                                ...flow,
+                                dag: DirectedGraph.from(flow.dag),
+                                jobProperties: JSON.stringify(flow.jobProperties)
+                            });
+                            notification.info({
+                                message: 'Flow Updated Successfully',
+                                description: flow.name + ' saved successfully',
+                                duration: 2,
+                                placement: 'bottomRight'
                             });
                         }
                     });
@@ -139,19 +159,6 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
                                 maxHeight: '80vh',
                             },
                         })
-                    }
-                />
-                <Divider className="no-mar white" />
-                <Button
-                    disabled={nodesLength < 1}
-                    type="link"
-                    className={"white mar-8"}
-                    icon={<PlayCircleOutlined />}
-                    onClick={() => {
-                        props.flow.id && runFlow(props.flow.id, () => {
-                            props.fetchProcesses();
-                        });
-                    }
                     }
                 />
                 <Divider className="no-mar white" />
@@ -187,7 +194,7 @@ const MenusComponent = (props: MenusComponentProps): React.ReactElement => {
     );
 };
 
-const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
+const saveFlow = (name: string, dag: DirectedGraph, jobProperties: string | undefined, onSuccess: (flow: IFlowMetadata) => void) => {
     fetch(FLOWS_SERVICE_URL, {
         method: "POST",
         headers: {
@@ -196,19 +203,23 @@ const saveFlow = (name: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetad
         body: JSON.stringify({
             name,
             dag,
+            jobProperties: JSON.parse(jobProperties || '{}')
         })
     }).then(response => response.json()).then(json => {
         onSuccess(json);
     })
 };
 
-const updateFlow = (id: string, dag: DirectedGraph, onSuccess: (flow: IFlowMetadata) => void) => {
+const updateFlow = (id: string, dag: DirectedGraph, jobProperties: string | undefined, onSuccess: (flow: IFlowMetadata) => void) => {
     fetch(FLOWS_SERVICE_URL + "/" + id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(dag.toJSON())
+        body: JSON.stringify({
+            dag: dag.toJSON(),
+            jobProperties: JSON.parse(jobProperties || '{}')
+        })
     }).then(response => response.json()).then(json => {
         onSuccess(json);
     })
@@ -225,7 +236,6 @@ const deleteFlow = (id: string, onSuccess: () => void) => {
 const runFlow = (flowId: string, onSuccess: () => void) => {
     fetch(FLOWS_SERVICE_URL + "/run/" + flowId, {
         method: "POST",
-        headers: { "content-type": "application/json" },
     }).then(response => response.json()).then(json => onSuccess());
 };
 

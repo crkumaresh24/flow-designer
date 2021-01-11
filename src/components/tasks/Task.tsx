@@ -30,7 +30,8 @@ export interface TaskComponent {
     type: string;
     taskComponent: React.ReactElement,
     panelComponent?: any | undefined,
-    panelWidth?: number
+    panelWidth?: number,
+    defaultValue?: any,
 }
 
 export interface TasksProps {
@@ -42,39 +43,40 @@ export interface TasksProps {
 export const onFieldsChange = (_changedFields: any, allFields: any, props: TasksProps): void => {
     const req: any = {};
     allFields.forEach((fieldData: FieldData) => {
-        if (fieldData.value && fieldData.value.length > 0) {
-            req[fieldData.name.toString()] = fieldData.value;
-        } else {
-            req[fieldData.name.toString()] = undefined;
-        }
+        req[fieldData.name.toString()] = fieldData.value;
     });
     props.setTaskRequest(req);
 };
 
 const Tasks = (props: TasksProps): React.ReactElement => {
-    const TagName = getTask(props.task.type);
-    if (TagName) {
-        return (
-            <TagName
-                setTaskRequest={props.setTaskRequest}
-                task={{ ...props.task, request: props.task.request || {} }}
-            />
-        );
+    const task = getTask(props.task.type);
+    if (task) {
+        const TagName = task.panelComponent;
+        if (TagName) {
+            return (
+                <TagName
+                    setTaskRequest={props.setTaskRequest}
+                    task={{ ...props.task, request: props.task.request }}
+                />
+            );
+        } else {
+            return <div>{'Please design this task'}</div>;
+        }
     } else {
         return <div>{'Please design this task'}</div>;
     }
 };
 
-const getTask = (taskType: string): any => {
-    let panelComponent = undefined;
+export const getTask = (taskType: string): TaskComponent | undefined => {
+    let taskToReturn: TaskComponent | undefined;
     Object.keys(registryComponents).forEach((category: string) => {
         registryComponents[category].forEach((task: TaskComponent) => {
             if (task.type === taskType) {
-                panelComponent = task.panelComponent;
+                taskToReturn = task;
             }
         });
     });
-    return panelComponent;
+    return taskToReturn;
 }
 
 export default Tasks;

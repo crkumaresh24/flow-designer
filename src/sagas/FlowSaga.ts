@@ -6,15 +6,16 @@ import { ReduxAction } from '../helpers/ReduxHelpers';
 import { IFlowMetadata } from '../models/IFlowMetadata';
 
 export function* flowsActionWatcher() {
-    yield takeLatest(FETCH_FLOWS_ACTION.request, fetchDataFlows);
+    yield takeLatest(FETCH_FLOWS_ACTION.request, fetchFlows);
 }
 
-function* fetchDataFlows(action: ReduxAction) {
+function* fetchFlows(action: ReduxAction) {
     const json = yield fetch(FLOWS_SERVICE_URL).then((response) => response.json());
     const flows = json.map((record: any) => ({
         id: record.id,
         name: record.name,
-        dag: DirectedGraph.from(record.dag)
+        dag: DirectedGraph.from(record.dag),
+        jobProperties: JSON.stringify(record.jobProperties)
     })).filter((flow: IFlowMetadata) => action.payload.currentFlow ? flow.id !== action.payload.currentFlow.id : true);
     yield put({ type: FETCH_FLOWS_ACTION.success, payload: { flows } });
 }

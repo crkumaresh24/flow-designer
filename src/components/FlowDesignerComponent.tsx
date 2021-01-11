@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Menu, Dropdown, Button, Drawer } from 'antd';
-import { DownOutlined, DeleteFilled, CreditCardOutlined, FundViewOutlined } from '@ant-design/icons';
+import { Menu, Dropdown, Button, Drawer, Modal } from 'antd';
+import { DownOutlined, DeleteFilled, CreditCardOutlined, FundViewOutlined, ToolOutlined } from '@ant-design/icons';
 import { create_UUID } from '../helpers/ReduxHelpers';
 import { DirectedGraph } from 'graphology';
 import { IDataFlowConnector, IDataFlowTask } from '../models/IFlowMetadata';
-import Task from './tasks/Task';
+import Task, { getTask } from './tasks/Task';
+import TextArea from 'antd/lib/input/TextArea';
 
 export interface DataFlowDesignerComponentProps {
     dag: DirectedGraph;
+    properties: any;
     setDAG: (dag: DirectedGraph) => void;
+    setProperties: (properties: string) => void;
 }
 
 const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.ReactElement => {
+
+    const [openProperties, setOpenProperties] = React.useState(false);
+    const toggleOpenProperties = () => setOpenProperties(!openProperties);
+
     const [openTask, setOpenTask] = React.useState<string>();
     const connectorDistance = 80;
     const taskElements: any = {};
@@ -71,7 +78,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                     in2: undefined,
                     status: undefined,
                     out1: undefined,
-                    request: {},
+                    request: getTask(type)?.defaultValue || {},
                     onSave: () => {
                         alert(type);
                     },
@@ -84,10 +91,14 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
             } else {
                 const nodeAttributes = props.dag.getNodeAttributes(taskId);
                 const taskElement: any = taskElements[taskId];
+                let taskWidth = 0;
+                if (taskElement && taskElement?.current) {
+                    taskWidth = taskElement?.current.clientWidth;
+                }
                 props.dag.mergeNodeAttributes(taskId, {
                     uiConfig: {
                         ...nodeAttributes.uiConfig,
-                        offsetX,
+                        offsetX: offsetX - (taskWidth / 2),
                         offsetY,
                     },
                 });
@@ -100,7 +111,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                             xOffSet = 16;
                             yOffset = 0;
                         } else {
-                            xOffSet = taskElement?.current.clientWidth + 64;
+                            xOffSet = taskWidth + 64;
                             yOffset = 18;
                         }
 
@@ -144,7 +155,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                 xOffSet = 16;
                 yOffset = 0;
             } else {
-                xOffSet = taskElement.current.clientWidth + 30;
+                xOffSet = taskElement.current.clientWidth + 48;
                 yOffset = 18;
             }
 
@@ -259,6 +270,16 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
 
     return (
         <div className={'flex grow content-wrapper'}>
+            <Button
+                type="primary"
+                onClick={toggleOpenProperties}
+                icon={<ToolOutlined />}
+                style={{
+                    position: 'absolute',
+                    right: 16,
+                    top: 56,
+                    zIndex: 4
+                }}>{'Properties'}</Button>
             {props.dag && (
                 <div className={'overflow-container'}>
                     <div
@@ -274,6 +295,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                             if (task.type === 'START_TASK') {
                                 return (
                                     <div
+                                        key={task.id}
                                         draggable="true"
                                         onDragStart={(event: any) => {
                                             event.dataTransfer?.setData('taskId', task.id);
@@ -388,15 +410,6 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                 return (
                                     <div
                                         className="flex center"
-                                        draggable="true"
-                                        onDragStart={(event) => {
-                                            event.dataTransfer?.setData('taskId', task.id);
-                                            event.dataTransfer?.setData('taskType', task.type);
-                                        }}
-                                        onDragOver={(e) => {
-                                            e.stopPropagation();
-                                            e.preventDefault();
-                                        }}
                                         key={task.id}
                                         style={{
                                             position: 'absolute',
@@ -424,12 +437,21 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                                 </Button>
                                         </div>
                                         <div
+                                            draggable="true"
+                                            onDragStart={(event) => {
+                                                event.dataTransfer?.setData('taskId', task.id);
+                                                event.dataTransfer?.setData('taskType', task.type);
+                                            }}
+                                            onDragOver={(e) => {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                            }}
                                             onDrop={(e: any) => {
                                                 e.stopPropagation();
                                                 e.preventDefault();
                                             }}
                                             style={{
-                                                padding: 16,
+                                                margin: 16,
                                             }}
                                             ref={taskElements[task.id]}
                                         >
@@ -566,7 +588,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                             <div draggable={true}>
                                                 <Button type="primary" shape="circle">
                                                     A
-                                                    </Button>
+                                                </Button>
                                             </div>
                                         </div>
                                     )}
@@ -593,6 +615,7 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
+                                            zIndex: 1
                                         }}
                                     >
                                         <Dropdown
@@ -621,6 +644,12 @@ const FlowDesignerComponent = (props: DataFlowDesignerComponentProps): React.Rea
                     </div>
                 </div>
             )}
+            <Modal title="Properties" footer={null} visible={openProperties} onCancel={toggleOpenProperties}>
+                <TextArea className="properties-text-area"
+                    rows={16}
+                    onChange={(e) => props.setProperties(e.target.value)}
+                    value={props.properties} />
+            </Modal>
         </div>
     );
 };

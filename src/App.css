@@ -8,6 +8,10 @@
     flex-direction: column;
 }
 
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
 .white {
     color: #FFFFFF;
 }
@@ -15,8 +19,8 @@
 .title-bar {
     background-color: #455A64;
     color: #FFFFFF;
-    min-height: 40px;
-    max-height: 40px;
+    min-height: 48px;
+    max-height: 48px;
     align-items: center;
 }
 
@@ -27,7 +31,9 @@
 
 .tool-bar {
     min-width: 300px;
+    max-width: 300px;
     background-color: #ECEFF1;
+    overflow: auto;
 }
 
 .vcenter {
@@ -112,7 +118,7 @@
 }
 
 .designer {
-    max-height: calc(100vh - 40px);
+    max-height: calc(100vh - 48px);
 }
 
 .content-wrapper {
@@ -123,6 +129,7 @@
     flex: 1;
     min-height: 0;
     min-width: 0;
+    z-index: 3;
 }
 
 .overflow-container {
@@ -134,4 +141,10 @@
     height: 8000px;
     width: 8000px;
     position: relative;
+}
+
+.properties-text-area {
+    resize: none;
+    background-color: #455A64;
+    color: #ECEFF1;
 }

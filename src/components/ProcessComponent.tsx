@@ -38,7 +38,8 @@ const ProcessComponent = (props: ProcessComponentProps): React.ReactElement => {
             width={"70%"}
             footer={null}
             bodyStyle={{ padding: 'unset' }}
-            title="Process Manager"
+            title={<><UnorderedListOutlined className="mar-right-16" />{"Process List"}
+            </>}
             visible={openTools}
             onCancel={toggleOpenTools}>
             <Button

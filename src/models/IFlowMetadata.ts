@@ -27,4 +27,5 @@ export interface IFlowMetadata {
     id?: string;
     dag?: DirectedGraph;
     name: string;
+    jobProperties?: string;
 }
