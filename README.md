@@ -13,11 +13,11 @@ React based UI app to design simple flow graph to automate chain of tasks
 
 # Developer Run
 
-0. Prerequisite
+0. Prerequisite:
 
 The developer studio is integrated with Keycloak IAM OAuth2 Server for security. Hence, Keycloak OAuth server should be running locally and appropriate JSON installation cofig should be kept at public/keycloak.json
 
-1. NPM Run -   
+1. NPM Run:   
 
 git clone https://github.com/crkumaresh24/flow-designer.git  
 cd flow-designer  
