@@ -14,6 +14,7 @@ import WriteModelTask from "./data-load/WriteModelTask";
 import LinearRegressionModelTask from "./ml-model/LinearRegressionModelTask";
 import WriteESTask from "./data-load/WriteESTask";
 import KMeansClassificationModelTask from "./ml-model/KMeansClassificationModelTask";
+import WriteLibSVMTask from "./data-load/WriteLibSVMTask";
 
 export const registryComponents: Record<string, TaskComponent[]> = {
     "BASIC": [
@@ -129,6 +130,13 @@ export const registryComponents: Record<string, TaskComponent[]> = {
                 "password": "postgres",
                 "dbtable": "postgres"
             }
+        },
+        {
+            title: "WRITE_LIBSVM",
+            type: "WRITE_LIBSVM_TASK",
+            taskComponent: <span>LSVM</span>,
+            panelComponent: WriteLibSVMTask,
+            panelWidth: 560,
         },
         {
             title: "WRITE_MODEL",
